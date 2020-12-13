@@ -86,7 +86,7 @@ The Key will be created and copy the last line into the BBB server to create the
 >```
 - add this line bellow
 >```shell script
->2/5 * * * * /opt/bbb_record_in_nextcloud/record_manager.sh > /dev/null
+>2-59/5 * * * * /opt/bbb_record_in_nextcloud/record_manager.sh > /dev/null 2>&1
 >```
 *Careful if you change the location. For this example, it's the **/opt/** folder used.*
 

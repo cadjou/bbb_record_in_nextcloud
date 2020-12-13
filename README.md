@@ -2,14 +2,24 @@
 This a little script to add into NextCloud the BigBlueButton record 
 with the **BigBlueButton NextCloud Application** and the Git **tilmanmoser/bbb-video-download** 
 
-NextCloud et BigBlueButton have to be in 2 different servers that you can link by ssh network disk
+NextCloud et BigBlueButton have to be in **2 different servers** that you can link by ssh network disk.
 
-After the recording meeting available on the NextCloud App, make a file link of the record and be patient. A new MP4 will be add in the same folder.
+After the recorded meeting available on the NextCloud App, create a link file of the recording and be patient. A new MP4 will be added in the same folder.
 
-When the installation, the script will create a RSA Key specific or change parameters to use yours
+When the installation, the script will create an RSA Key specific or change parameters to use yours.
+
+- OS tested : Debian 10 / Ubuntu 16.04 and 20.04
+- Files and GroupFolder NextCloud App friendly
+
+## How it's working
+1. An Url file have to be create with the link of the record by the BigBlueButton NextCloud App
+2. In NextCloud server, the PHP script get this new file and add to a list file into the mounted network disk
+3. In BigBlueButton server, this list is being check and search if the MP4 file is available. In this case, the MP4 is being copy in the mounted network disk
+4. To finish, the PHP script check this file and copy it in the right place and make a scan file
 
 ## How to install
 ### On NextCloud Server
+*The script uses **sshfs** and **expect**. These package will be installed by it in case.*
 - Install the BigBlueButton application on your NextCloud. See https://apps.nextcloud.com/apps/bbb
 - Connect to the server with root user and follow this command
 >```shell script
@@ -91,6 +101,20 @@ The Key will be created and copy the last line into the BBB server to create the
 *Careful if you change the location. For this example, it's the **/opt/** folder used.*
 
 ## How to use
-After the recording meeting available on the NextCloud App, make a file link of the record and be patient.\
-A new MP4 will be add in the same folder with the same name.
+After the recording meeting available on the NextCloud App, create a link file of the recording and be patient.\
+A new MP4 will be added in the same folder with the same name.
+
+## Roadmap / Next Step
+- Improve the documentation and make French version
+- Rebuild the PHP script for POO version and maybe a NextCloud App
+- Add function to remove the url file and more ideas from you
+- Use for All-in-one server
+- Improve the Bash script (Installation / Log)
+- Add comments
+
+## Get an auto-managed NextCloud and BigBlueButton by KWA Digital
+KWA Digital can provide the servers and manage all the installation and maintains them.\
+The support team are with you to use all the possibilities of these Applications and can develop some utilities needed.\
+You can contact us by email [contact@kwa.digital](mailto:contact@kwa.digital) or you can make an appointment by [clicking on this link](https://nuage.kwa.agency/index.php/apps/appointments/pub/mmZvT5nwnmmt4g%3D%3D/form "Appointment Page").\
+[https://kwa.digital](https://kwa.digital "The Digital Agency")
 

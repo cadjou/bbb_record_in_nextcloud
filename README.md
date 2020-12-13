@@ -55,10 +55,10 @@ The Key will be created and copy the last line into the BBB server to create the
 >php -f record_manager.php
 >Create script /opt/bbb_record_in_nextcloud/mount_video_folder.sh
 >Make executable script /opt/bbb_record_in_nextcloud/mount_video_folder.sh
->Add Cron
 >Create local path /opt/bbb_record_in_nextcloud/video
 >Execute script > /opt/bbb_record_in_nextcloud/mount_video_folder.sh myuser@my.server.net '/opt/bbb_record_in_nextcloud/video' 'video' "my passphrase"
->Add record e90{...}ad02-1606123711669 // if there is all ready
+>Add Cron
+>>Add record e90{...}ad02-1606123711669 // if there is all ready
 >```
 *Now the script will be executed every 5 min to get the Url file of the BBB recording and get them when they will be available by the BBB serveur*
 
@@ -88,7 +88,7 @@ The Key will be created and copy the last line into the BBB server to create the
 >```shell script
 >2/5 * * * * /opt/bbb_record_in_nextcloud/record_manager.sh > /dev/null
 >```
-*Careful if you change the location. For this example, it's the **/opt/** folder used.
+*Careful if you change the location. For this example, it's the **/opt/** folder used.*
 
 ## How to use
 After the recording meeting available on the NextCloud App, make a file link of the record and be patient.\

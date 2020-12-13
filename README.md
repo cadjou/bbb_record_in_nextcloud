@@ -2,7 +2,7 @@
 This a little script to add into NextCloud the BigBlueButton record 
 with the **BigBlueButton NextCloud Application** and the Git **tilmanmoser/bbb-video-download** 
 
-NextCloud et BigBlueButton have to be in **2 different servers** that you can link by ssh network disk.
+NextCloud and BigBlueButton have to be in **2 different servers** that you can link by ssh network disk.
 
 After the recorded meeting available on the NextCloud App, create a link file of the recording and be patient. A new MP4 will be added in the same folder.
 
@@ -29,9 +29,9 @@ When the installation, the script will create an RSA Key specific or change para
 >rm record_manager.sh
 >nano config.php
 >```
-- Change le server connexion and save the config
+- Change server connexion and save the config
 >```php
->$serveur = 'myuser@my.server.ent';
+>$server = 'myuser@my.server.ent';
 >```
 - If RSA Key is already used between these servers, it must be with a passphrase.\
 So add the passphrase into the config
@@ -54,7 +54,7 @@ The Key will be created and copy the last line into the BBB server to create the
 >```
 >Do you want create RSA Key (Y/n):
 >*******************************************
->Copy the public key in /root/.ssh/id_rsa.pub the server distant in ~/.ssh/authorized_keys or
+>Copy the public key in /root/.ssh/id_rsa_bbb_record.pub the server distant in ~/.ssh/authorized_keys or
 >Run this command on the BBB server
 >> echo "ssh-rsa AAAAB{...}9Z5lfERP root_bbb_record" >> ~/.ssh/authorized_keys
 >*******************************************

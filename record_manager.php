@@ -1,11 +1,15 @@
 <?php
+// Init message
+$message = [];
+
 // Load config
 if (!is_file(__DIR__ . '/config.php')) {
-    die('***********************' . "\n" .
-        'Error Config' . "\n" .
-        'No find ' . __DIR__ . '/config.php' . "\n" .
-        'Check Doc of bbb_record_in_nextcloud' . "\n" .
-        '***********************' . "\n");
+	$message[] = '***********************';
+	$message[] = 'Error Config';
+	$message[] = 'No find ' . __DIR__ . '/config.php';
+	$message[] = 'Check github https://github.com/cadjou/bbb_record_in_nextcloud';
+	$message[] = '***********************';
+	die_message();
 }
 require __DIR__ . '/config.php';
 
@@ -29,8 +33,9 @@ $unix_user = !empty($unix_user) ? $unix_user : 'www-data';
 $unix_group = !empty($unix_group) ? $unix_group : 'www-data';
 $path_nct = !empty($path_nct) ? $path_nct : '/var/www/nextcloud';
 
-// Cron parameters                        
+// Script path                       
 $path_script = !empty($path_script) ? $path_script : __DIR__ . '/mount_video_folder.sh';
+$path_ssh_option = !empty($path_ssh_option) ? $path_ssh_option : __DIR__ . '/option_ssh';
 
 // Cron parameters                        
 $install_cron = isset($install_cron) ? $install_cron : true;
@@ -44,34 +49,34 @@ $path_list = rtrim($path_local, '/') . '/' . trim($file_list, '/');
 $list_table = is_file($path_list) ? file($path_list) : [];
 $lastid = is_file($file_lastid) ? file_get_contents($file_lastid) : 0;
 
-// Init message
-$message = [];
-
 // If run by cron
 $run_cron = isset($argv[1]);
 
 // Load config Nextcloud
 if (!is_file(rtrim($path_nct, '/') . '/config/config.php')) {
-    die('***********************' . "\n" .
-        'Error Path Config Nextcloud' . "\n" .
-        'No find ' . $path_nct . "\n" .
-        'Check parameter $path_nct in ' . __DIR__ . '/config.php' . "\n" .
-        '***********************' . "\n");
+	$message[] = '***********************';
+	$message[] = 'Error Path Config Nextcloud';
+	$message[] = 'No find ' . $path_nct;
+	$message[] = 'Check parameter $path_nct in ' . __DIR__ . '/config.php';
+	$message[] = '***********************';
+	die_message();
 }
 require rtrim($path_nct, '/') . '/config/config.php';
 if (empty($CONFIG) or !is_array($CONFIG)) {
-    die('***********************' . "\n" .
-        'Error Config Nextcloud' . "\n" .
-        'Check parameter $path_nct in ' . __DIR__ . '/config.php or your NextCloud config' . "\n" .
-        '***********************' . "\n");
+	$message[] = '***********************';
+	$message[] = 'Error Config Nextcloud';
+	$message[] = 'Check parameter $path_nct in ' . __DIR__ . '/config.php or your NextCloud config';
+	$message[] = '***********************';
+	die_message();
 }
 
 // Error Management mount network disk
 if (empty($server)) {
-    die('***********************' . "\n" .
-        'Error Config server distant' . "\n" .
-        'Check parameter $server in ' . __DIR__ . '/config.php' . "\n" .
-        '***********************' . "\n");
+	$message[] = '***********************';
+	$message[] = 'Error Config server distant';
+	$message[] = 'Check parameter $server in ' . __DIR__ . '/config.php';
+	$message[] = '***********************';
+	die_message();
 }
 // Manage rsa key
 if (!$passphrase and !$run_cron) {
@@ -99,9 +104,7 @@ if (!$passphrase and !$run_cron) {
         $message[] = 'Run this command on the BBB server';
         $message[] = '> echo "' . trim(file_get_contents($path_id_rsa_default . '.pub')) . '" >> ~/.ssh/authorized_keys';
         $message[] = '*******************************************';
-        $message[] = '';
-        echo implode("\n", $message);
-        die();
+        die_message();
     }
 }
 
@@ -123,58 +126,57 @@ if (!is_dir($path_record)) {
 
     // Create script
     if (!is_file($path_script)) {
-        // mount_video_folder.sh server path_local path_distant passphrase path_rsa
-        $mount_script = '#!/usr/bin/expect -f' . "\n" .
-            'set server [lindex $argv 0]' . "\n" .
-            'set path_l [lindex $argv 1]' . "\n" .
-            'set path_d [lindex $argv 2]' . "\n" .
-            'set passphrase [lindex $argv 3]' . "\n" .
-            'set path_rsa [lindex $argv 4]' . "\n" .
-            'spawn -ignore HUP /usr/bin/sshfs -f $server:$path_d $path_l -o IdentityFile=$path_rsa' . "\n" .
-            'expect {' . "\n" .
-            '		"passphrase" {' . "\n" .
-            '				send "$passphrase\n"' . "\n" .
-            '				expect {' . "\n" .
-            '						"\n" { }' . "\n" .
-            '				}' . "\n" .
-            '		}' . "\n" .
-            '}' . "\n";
-        file_put_contents($path_script, $mount_script);
-        $message[] = 'Create script ' . $path_script;
+		$message[] = '***********************';
+		$message[] = 'File not exist ' . $path_script;
+		$message[] = 'Check github https://github.com/cadjou/bbb_record_in_nextcloud';
+        $message[] = '***********************';
+		die_message();
     }
+	
+	// Create script
+    if (!is_file($path_ssh_option)) {
+		$message[] = '***********************';
+		$message[] = 'File not exist ' . $path_ssh_option;
+		$message[] = 'Check github https://github.com/cadjou/bbb_record_in_nextcloud';
+        $message[] = '***********************';
+		die_message();
+    }
+	
     // Make executable script
     if (!is_executable($path_script)) {
         exec('chmod +x ' . escapeshellarg($path_script));
         $message[] = 'Make executable script ' . $path_script;
     }
+	
     // Create local path
     if (!is_dir($path_local)) {
         exec('mkdir ' . escapeshellarg($path_local));
         $message[] = 'Create local path ' . $path_local;
     }
+	
     // Execute script
     if (is_file($path_script) and is_executable($path_script)) {
-        $script = $path_script . ' ' . $server . ' ' . escapeshellarg($path_local) . ' ' . escapeshellarg($path_distant) . ' "' . $passphrase . '" ' . escapeshellarg($path_id_rsa);
+        $script = $path_script . ' ' . $server . ' ' . escapeshellarg($path_local) . ' ' . 
+				  escapeshellarg($path_distant) . ' "' . $passphrase . '" ' . escapeshellarg($path_id_rsa) . ' ' . escapeshellarg($path_ssh_option);
         exec($script);
         $message[] = 'Execute script > ' . $script;
-
     }
 }
 
 // Manage mount network disk
 if (empty(exec('mountpoint ' . escapeshellarg($path_local) . ' | grep "is a mountpoint"'))) {
-    echo implode("\n", $message);
-    die('***********************' . "\n" .
-        'Unmouted ' . $path_record . "\n" .
-        'Check parameter $server / $path_distant / $passphrase in ' . __DIR__ . '/config.php' . "\n" .
-        '***********************' . "\n");
+    $message[] = '***********************';
+    $message[] = 'Unmouted ' . $path_record;
+    $message[] = 'Check parameter $server / $path_distant / $passphrase in ' . __DIR__ . '/config.php';
+    $message[] = '***********************';
+	die_message();
 }
 if (!is_dir($path_record)) {
-    echo implode("\n", $message);
-    die('***********************' . "\n" .
-        'Missing ' . $path_record . "\n" .
-        'Install script in distant server or check parameter $record_folder in ' . __DIR__ . '/config.php' . "\n" .
-        '***********************' . "\n");
+    $message[] = '***********************';
+    $message[] = 'Missing ' . $path_record;
+    $message[] = 'Install script in distant server or check parameter $record_folder in ' . __DIR__ . '/config.php';
+    $message[] = '***********************';
+	die_message();
 }
 
 // Install Cron
@@ -306,7 +308,21 @@ if (isset($list_table)) {
 // Database disconnection
 unset($dbh);
 
-file_put_contents($path_log, implode("\n", $message) . "\n",FILE_APPEND);
-if (!$run_cron) {
-    echo implode("\n", $message) . "\n";
+die_message(false);
+
+// Message Management
+function die_message($die = true){
+	global $message, $run_cron, $path_log;
+	
+	if (!is_array($message)) $message = [$message];
+	
+	$path_log = !empty($path_log) ? $path_log : __DIR__ . '/run.log' ;
+	
+	$message_string = implode("\n", $message) . "\n";
+	
+	file_put_contents($path_log, $message_string,FILE_APPEND);
+	
+	if (!$run_cron) echo $message_string;
+	
+	if ($die) die();
 }

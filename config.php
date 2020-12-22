@@ -19,8 +19,9 @@ $path_id_rsa = ''; // RSA Kay location / Let empty to create a rsa key
 // $unix_group    = 'www-data';
 // $path_nct      = '/var/www/nextcloud';
 
-// Cron parameters
+// Script parameters
 // $path_script   = __DIR__ . '/mount_video_folder.sh';
+// option_ssh     = __DIR__ . '/option_ssh';
 
 // Cron parameters
 // $install_cron  = true;
